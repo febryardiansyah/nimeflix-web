@@ -1,69 +1,106 @@
-import Image from "next/image";
+import Link from "next/link";
+import { Suspense } from "react";
+import { getHome } from "@/lib/api";
+import { AnimeGrid, GridSkeleton, Poster } from "@/components/anime-card";
+import { Container, SectionHeading } from "@/components/ui";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
+    <Suspense fallback={<HomeSkeleton />}>
+      <Home />
+    </Suspense>
+  );
+}
+
+async function Home() {
+  const { ongoing, complete } = await getHome();
+  const hero = ongoing[0];
+
+  return (
+    <>
+      {hero && (
+        <section className="relative isolate overflow-hidden border-b border-line">
+          <div aria-hidden className="absolute inset-0 -z-10">
+            <Poster
+              src={hero.thumb}
+              alt=""
+              className="scale-125 blur-3xl saturate-150"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/80 to-ink/40" />
+            <div className="absolute inset-0 bg-gradient-to-t from-ink to-transparent" />
+          </div>
+          <span
+            aria-hidden
+            className="vert pointer-events-none absolute right-4 top-6 hidden select-none font-display text-7xl leading-none tracking-widest text-cream/[0.06] lg:block"
           >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+            新着アニメ
+          </span>
+
+          <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-14 sm:px-6 md:grid-cols-[1fr_280px] md:py-20 lg:grid-cols-[1fr_320px]">
+            <div className="reveal">
+              <p className="mb-4 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.3em] text-vermilion">
+                <span className="h-px w-10 bg-vermilion" />
+                Baru rilis · {hero.note}
+              </p>
+              <h1 className="font-display text-4xl leading-[1.05] sm:text-6xl lg:text-7xl">
+                {hero.title}
+              </h1>
+              <div className="mt-6 flex flex-wrap items-center gap-3">
+                {hero.episode && (
+                  <span className="stamp stamp-outline text-xs">
+                    {hero.episode}
+                  </span>
+                )}
+                <span className="text-sm text-mute">
+                  Subtitle Indonesia · Ongoing
+                </span>
+              </div>
+              <div className="mt-8 flex flex-wrap gap-4">
+                <Link href={`/anime/${hero.id}`} className="btn">
+                  ▶ Tonton sekarang
+                </Link>
+                <Link href="/ongoing" className="btn btn-ghost">
+                  Semua ongoing
+                </Link>
+              </div>
+            </div>
+
+            <Link
+              href={`/anime/${hero.id}`}
+              className="card-link reveal order-first mx-auto w-48 bg-panel md:order-none md:w-full"
+              style={{ "--i": 3 } as React.CSSProperties}
+            >
+              <div className="aspect-[3/4] overflow-hidden">
+                <Poster src={hero.thumb} alt={hero.title} />
+              </div>
+            </Link>
+          </div>
+        </section>
+      )}
+
+      <Container>
+        <section>
+          <SectionHeading title="Sedang Tayang" jp="放送中" href="/ongoing" />
+          <AnimeGrid items={ongoing} />
+        </section>
+
+        <section className="mt-20">
+          <SectionHeading title="Baru Tamat" jp="完結" href="/complete" />
+          <AnimeGrid items={complete} />
+        </section>
+      </Container>
+    </>
+  );
+}
+
+function HomeSkeleton() {
+  return (
+    <>
+      <div className="skeleton h-[28rem] border-b border-line" />
+      <Container>
+        <div className="skeleton mb-6 h-8 w-56" />
+        <GridSkeleton />
+      </Container>
+    </>
   );
 }

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { io } from "next/cache";
 import { Suspense } from "react";
 import { getHome } from "@/lib/api";
 import { AnimeGrid, GridSkeleton, Poster } from "@/components/anime-card";
@@ -13,6 +14,9 @@ export default function HomePage() {
 }
 
 async function Home() {
+  // Excludes this fetch from the build-time prerender (the API isn't reachable
+  // from the build environment) while keeping it cached at request time.
+  await io();
   const { ongoing, complete } = await getHome();
   const hero = ongoing[0];
 

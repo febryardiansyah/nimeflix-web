@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { io } from "next/cache";
 import { Suspense } from "react";
 import { getSchedule } from "@/lib/api";
 import { Container, PageHeader } from "@/components/ui";
@@ -28,6 +29,9 @@ export default function SchedulePage() {
 }
 
 async function Days() {
+  // Excludes this fetch from the build-time prerender (the API isn't reachable
+  // from the build environment) while keeping it cached at request time.
+  await io();
   const days = await getSchedule();
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

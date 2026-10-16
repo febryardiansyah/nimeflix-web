@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { io } from "next/cache";
 import { Suspense } from "react";
 import { getGenres } from "@/lib/api";
 import { Poster } from "@/components/anime-card";
@@ -29,6 +30,9 @@ export default function GenresPage() {
 }
 
 async function GenreGrid() {
+  // Excludes this fetch from the build-time prerender (the API isn't reachable
+  // from the build environment) while keeping it cached at request time.
+  await io();
   const genres = await getGenres();
   return (
     <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">

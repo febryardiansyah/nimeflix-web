@@ -112,80 +112,85 @@ body::before {
 
 /* ---------------------------- components ---------------------------- */
 
-.stamp {
-  display: inline-block;
-  font-family: var(--font-display);
-  font-size: 0.65rem;
-  letter-spacing: 0.06em;
-  line-height: 1;
-  padding: 0.35rem 0.5rem;
-  background: var(--vermilion);
-  color: var(--ink);
-  transform: rotate(-3deg);
-  box-shadow: 2px 2px 0 var(--ink);
-}
+/* Wrapped in @layer components so Tailwind utility classes (e.g. `flex`,
+   `grid`) combined in the same className still win the cascade over these
+   custom rules — unlayered CSS would otherwise always beat layered utilities. */
+@layer components {
+  .stamp {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-size: 0.65rem;
+    letter-spacing: 0.06em;
+    line-height: 1;
+    padding: 0.35rem 0.5rem;
+    background: var(--vermilion);
+    color: var(--ink);
+    transform: rotate(-3deg);
+    box-shadow: 2px 2px 0 var(--ink);
+  }
 
-.stamp-outline {
-  background: transparent;
-  color: var(--vermilion);
-  border: 1.5px solid var(--vermilion);
-  box-shadow: none;
-}
+  .stamp-outline {
+    background: transparent;
+    color: var(--vermilion);
+    border: 1.5px solid var(--vermilion);
+    box-shadow: none;
+  }
 
-.card-link {
-  display: block;
-  transition:
-    transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1),
-    box-shadow 0.25s;
-}
-.card-link:hover,
-.card-link:focus-visible {
-  transform: translate(-4px, -4px);
-  box-shadow: 6px 6px 0 var(--vermilion);
-}
-.card-link:hover img {
-  transform: scale(1.06);
-}
+  .card-link {
+    display: block;
+    transition:
+      transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1),
+      box-shadow 0.25s;
+  }
+  .card-link:hover,
+  .card-link:focus-visible {
+    transform: translate(-4px, -4px);
+    box-shadow: 6px 6px 0 var(--vermilion);
+  }
+  .card-link:hover img {
+    transform: scale(1.06);
+  }
 
-.vert {
-  writing-mode: vertical-rl;
-  text-orientation: upright;
-}
+  .vert {
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+  }
 
-.hide-scrollbar {
-  scrollbar-width: none;
-}
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
+  .hide-scrollbar {
+    scrollbar-width: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-family: var(--font-display);
-  font-size: 0.8rem;
-  letter-spacing: 0.04em;
-  padding: 0.8rem 1.25rem;
-  background: var(--vermilion);
-  color: var(--ink);
-  box-shadow: 4px 4px 0 var(--cream);
-  transition:
-    transform 0.15s,
-    box-shadow 0.15s;
-}
-.btn:hover {
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 var(--cream);
-}
-.btn-ghost {
-  background: transparent;
-  color: var(--cream);
-  border: 1.5px solid var(--line);
-  box-shadow: none;
-}
-.btn-ghost:hover {
-  border-color: var(--cream);
-  transform: none;
-  box-shadow: none;
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    padding: 0.8rem 1.25rem;
+    background: var(--vermilion);
+    color: var(--ink);
+    box-shadow: 4px 4px 0 var(--cream);
+    transition:
+      transform 0.15s,
+      box-shadow 0.15s;
+  }
+  .btn:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 var(--cream);
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--cream);
+    border: 1.5px solid var(--line);
+    box-shadow: none;
+  }
+  .btn-ghost:hover {
+    border-color: var(--cream);
+    transform: none;
+    box-shadow: none;
+  }
 }

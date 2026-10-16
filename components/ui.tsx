@@ -121,7 +121,7 @@ export function Pagination({
   return (
     <nav
       aria-label="Paginasi"
-      className="mt-12 flex items-center justify-between gap-4 border-t border-line pt-6"
+      className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-6"
     >
       {page > 1 ? (
         <Link href={href(page - 1)} className="btn btn-ghost">
@@ -130,7 +130,7 @@ export function Pagination({
       ) : (
         <span />
       )}
-      <span className="font-display text-sm text-mute">
+      <span className="order-first w-full text-center font-display text-sm text-mute sm:order-none sm:w-auto">
         HALAMAN <span className="text-cream">{page}</span>
       </span>
       {hasNext ? (

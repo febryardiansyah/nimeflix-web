@@ -30,7 +30,7 @@ export function Navbar() {
         <form
           action="/search"
           role="search"
-          className="ml-auto flex w-full max-w-xs items-center border border-line bg-panel transition-colors focus-within:border-vermilion"
+          className="ml-auto flex w-full min-w-0 max-w-xs items-center border border-line bg-panel transition-colors focus-within:border-vermilion"
         >
           <label htmlFor="q" className="sr-only">
             Cari anime
